@@ -78,6 +78,11 @@ namespace inits{
                 break;
         }
     }
+    class GeneralProblemsMainLogic
+    {
+        public:
+            int pass;           
+    };
 }
 
 #endif
