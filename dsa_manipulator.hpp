@@ -23,6 +23,9 @@ namespace dsa{
             T maxSubArraySum();
             T maxAppearingElement();
             double avgVector();
+            void swap(int a, int b);
+            void selectionSort();
+            void quickSort();
             void rightRotate(int steps);
             void leftRotate(int steps);
             void reverseArray(int start, int end);
@@ -141,6 +144,51 @@ namespace dsa{
             }
         }
         return max_sum;
+    }
+    template <typename T>
+    void ManVector<T>::selectionSort(){
+        int size = this->size;
+        int i, j, min, temp;
+        for (i = 0; i < size - 1; i++){
+            min = i;
+            for (j = i + 1; j < size; j++){
+                if (this->g_vec[j] < this->g_vec[min]){
+                    min = j;
+                }
+            }
+            temp = this->g_vec[i];
+            this->g_vec[i] = this->g_vec[min];
+            this->g_vec[min] = temp;
+        }        
+    }
+    template <typename T>
+    void ManVector<T>::swap(int a, int b){
+        int temp = this->g_vec[a];
+        this->g_vec[a] = this->g_vec[b];
+        this->g_vec[b] = temp;
+    }
+    template <typename T>
+    void ManVector<T>::quickSort(){
+        int lower = 0; upper = this->size - 1;
+        if (upper <= lower){
+            return;
+        }
+        int pivot = this->g_vec[lower];
+        int start = lower;
+        int end = upper;
+        while (lower < upper){
+            while (arr[lower] <= pivot && lower < upper){
+                lower++;
+            }
+            while (arr[upper] > pivot && lower <= upper){
+                upper--;
+            }
+            if (lower < upper){
+                swap(arr, upper, lower);
+            }
+        }
+        swap(this->g_vec, upper, start); // upper is the pivot positionquickSortUtil(arr, start, upper - 1); // pivot -1 is the upper for left sub array.
+        quickSortUtil(this->g_vec, upper + 1, end); // pivot + 1 is the lower for right sub array.
     }
     template <typename T>
     void ManVector<T>::printDuplicates1(){
