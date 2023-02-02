@@ -2,6 +2,7 @@
 # define DSA_MANIPULATOR_H
 
 #include <vector>
+#include <algorithm>
 #include <unordered_set>
 #include <cstdio>
 #include <iostream>
@@ -111,14 +112,14 @@ namespace dsa{
     }
     template <typename T>
     void ManVector<T>::leftRotate(int steps){
-        int n = this->size();
+        int n = this->size;
         reverseArray(0, steps - 1);
         reverseArray(steps, n - 1);
         reverseArray(0, n - 1);
     }
     template <typename T>
     void ManVector<T>::rightRotate(int steps){
-        int n = this->size();
+        int n = this->size;
         reverseArray(n - steps, n - 1);
         reverseArray(0, steps - 1);
         reverseArray(0, n - 1);
@@ -169,7 +170,7 @@ namespace dsa{
     }
     template <typename T>
     void ManVector<T>::quickSort(){
-        int lower = 0; upper = this->size - 1;
+        int lower = 0; int upper = this->size - 1;
         if (upper <= lower){
             return;
         }
@@ -177,14 +178,14 @@ namespace dsa{
         int start = lower;
         int end = upper;
         while (lower < upper){
-            while (arr[lower] <= pivot && lower < upper){
+            while (this->g_vec[lower] <= pivot && lower < upper){
                 lower++;
             }
-            while (arr[upper] > pivot && lower <= upper){
+            while (this->g_vec[upper] > pivot && lower <= upper){
                 upper--;
             }
             if (lower < upper){
-                swap(arr, upper, lower);
+                swap(this->g_vec, upper, lower);
             }
         }
         swap(this->g_vec, upper, start); // upper is the pivot positionquickSortUtil(arr, start, upper - 1); // pivot -1 is the upper for left sub array.
@@ -221,9 +222,9 @@ namespace dsa{
         //Time complexity O(n.Log(n))
         T curr = this->g_vec[0], max_appearance = this->g_vec[0];
         int curr_count = 0, max_appearance_count = 0;
-        sort(this->g_vec.begin(), this->g_vec.end());
+        std::sort(this->g_vec.begin(), this->g_vec.end());
         for(int i = 1; i < this->size; i++){
-            if(this->g_vec[i] == this->g_vecp[i - 1]){
+            if(this->g_vec[i] == this->g_vec[i - 1]){
                 curr_count++;
             }
             else{
@@ -293,7 +294,134 @@ namespace dsa{
         towerOfHanoi(num - 1, src, tmp, dst);
         std::cout<<"Move "<<num<<" disk from peg "<<src<<" to peg "<<dst<<std::endl;
         towerOfHanoi(num - 1, tmp, dst, src);
-    }  
+    }
+
+    class LinkedList{
+        
+        private:
+            struct Node{
+                int value;
+                Node *next;
+                Node(int v, Node *n);
+                Node(int v);
+            };
+
+            Node *head;
+            int list_size;
+
+        public:
+            virtual int size();
+            virtual bool isEmpty();
+            virtual void addHead(int v);
+            virtual void addTail(int v);
+            virtual void printList();
+            virtual void reverse();
+            virtual bool loopDetectSPFP();
+            virtual bool loopDetectReverse();
+            virtual int removeHead();
+    };  
+
+    LinkedList::Node::Node(int v){
+        value = v;
+        next = nullptr;
+    }
+
+    LinkedList::Node::Node(int v, Node *n){
+        value = v;
+        next = n;
+    }
+
+    int LinkedList::size(){
+        return list_size;
+    }
+
+    bool LinkedList::isEmpty(){
+        return list_size == 0;
+    }
+
+    void LinkedList::addHead(int v){
+        head = new Node(v, head);
+        list_size++;
+    }
+
+    void LinkedList::addTail(int v){
+        Node *newNode = new Node(v, nullptr);
+        Node *curr = head;
+        if(head == nullptr){
+            head = newNode;
+        }
+        while (curr->next != nullptr)
+        {
+            curr = curr->next;
+        }
+        curr->next = newNode;
+    }
+
+    void LinkedList::printList(){
+        Node *temp = head; int count = 1;
+        while(temp != nullptr){
+            std::cout<<"Element "<<count<<" from LinkedList has a value of "<<temp->next<<std::endl;
+            temp = temp->next;
+            count++;
+        }
+    }
+
+    int LinkedList::removeHead(){
+        if(isEmpty()){
+            throw std::exception();
+        }
+        Node *deleteme = head;
+        int value = head->value;
+        head = head->next;
+        list_size--;
+        delete deleteme;
+        return value;
+    }
+
+    void LinkedList::reverse(){
+        Node *curr = head;
+        Node *prev = nullptr;
+        Node *next = nullptr;
+        while (curr != nullptr)
+        {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+        }
+        head = prev;
+    }
+
+    bool LinkedList::loopDetectSPFP(){
+        Node *slowPtr;
+        Node *fastPtr;
+        slowPtr = fastPtr = head;
+        while (fastPtr->next != nullptr && fastPtr->next->next != nullptr)
+        {
+        slowPtr = slowPtr->next;
+        fastPtr = fastPtr->next->next;
+        if (slowPtr == fastPtr)
+        {
+        std::cout << "loop found" << std::endl;
+        return true;
+        }
+        }
+        std::cout << "loop not found" << std::endl;
+        return false;
+    }
+
+    bool LinkedList::loopDetectReverse(){
+        Node *temp = head;
+        reverse();
+        if(temp != head){
+            reverse();
+            return false;
+        }
+        else{
+            reverse();
+            return true;
+        }
+    }
 }
 
 #endif
