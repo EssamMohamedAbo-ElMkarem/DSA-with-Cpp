@@ -39,11 +39,16 @@ int main(void){
             array_initializer.arrayInit();
             break;
         }
-        case 99:
+        case 99:{
             cout<<"Exiting!!"<<endl;
             exit(0);
             break;
-
+        }
+        case 747:{
+            cout<<"Love wins!"<<endl;
+            exit(0);
+            break;
+        }
         default:
             cout<<"Please, Enter a valid value.\n\n"<<endl;
             break;
